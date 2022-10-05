@@ -34,8 +34,6 @@ const AddSearchWord = function({addClickHandler, searchClickHandler}) {
 
   )
 };
-
-
 const Definition = function({addClicked, setInputDefinition}) {
   if (addClicked === 1) {
     return (

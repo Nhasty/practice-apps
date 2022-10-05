@@ -7,13 +7,33 @@ function App() {
   useEffect(() => {
     axios.get('http://localhost:3000/glossary')
       .then((response) => {
-        console.log(response.data)
         setWords(response.data)
       })
+      .catch(err => console.log(err))
   }, []);
 
-  const addClick = (addWord) => {
-
+  const addClick = (addWord, addDefinition) => {
+    let addObject = {
+      word: addWord,
+      definition: addDefinition
+    };
+    axios.post('http://localhost:3000/glossary', addObject)
+      .then(response => {
+        if (response.status === 201) {
+          axios.get('http://localhost:3000/glossary')
+            .then((response) => {
+              setWords(response.data)
+            })
+            .catch(err => console.log(err))
+        }
+      })
+      .catch(err => {
+        if (err.message === 'Request failed with status code 409') {
+          alert(`${addWord} is already in Glossary`)
+        } else {
+          console.log(err.message)
+        }
+      });
   }
 
   const searchClick = (searchWord) => {
