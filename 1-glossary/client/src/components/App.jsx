@@ -37,7 +37,18 @@ function App() {
   }
 
   const searchClick = (searchWord) => {
-
+    if (searchWord === '') {
+      axios.get('http://localhost:3000/glossary')
+        .then((response) => {
+          setWords(response.data)
+        })
+        .catch(err => console.log(err))
+    } else {
+      let mappedWords = words.filter(wordObject => {
+        return wordObject.word.indexOf(searchWord) > -1;
+      });
+      setWords(mappedWords)
+    }
   }
 
   const updateClick = () => {
@@ -52,7 +63,7 @@ function App() {
   return(
     <div>
       <h1>Glossary</h1>
-      <AddSearchWord addClickHandler={addClick} searchClickhandler={searchClick}/>
+      <AddSearchWord addClickHandler={addClick} searchClickHandler={searchClick}/>
       <WordsList words={words} updateClickHandler={updateClick} deleteClickHandler={deleteClick}/>
     </div>
   )

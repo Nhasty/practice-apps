@@ -22,7 +22,7 @@ const AddSearchWord = function({addClickHandler, searchClickHandler}) {
         Add
       </button>
       <button onClick={() => {
-        searchClickHander(inputWord);
+        searchClickHandler(inputWord);
         document.getElementById('AddSearch').value = '';
         setInputWord('');
       }}>
