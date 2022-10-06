@@ -21,24 +21,23 @@ function App() {
     axios.post('http://localhost:3000/glossary', addObject)
       .then(response => {
         if (response.status === 201) {
-          axios.get('http://localhost:3000/glossary')
-            .then((response) => {
-              setWords(response.data)
-              alert(`${addWord} is already in the Glossary!`)
-            })
-            .catch(err => console.log(err))
+          return axios.get('http://localhost:3000/glossary')
         }
+      }).then((response) => {
+        setWords(response.data)
       })
       .catch(err => {
+        console.log('here')
         if (err.message === 'Request failed with status code 409') {
-          axios.get('http://localhost:3000/glossary').then((response) => {setWords(response.data)}).catch(err => console.log(err));
+          axios.get('http://localhost:3000/glossary')
+          .then((response) => {
+            alert(`${addWord} is alread in the Glossary`)
+            setWords(response.data)
+          })
+          .catch(err => console.log(err));
         }
       });
   }
-  // alert(`${addWord} is already in Glossary`)
-  //       } else {
-  //         console.log(err.message)
-  //       }
 
   const searchClick = (searchWord) => {
     if (searchWord === '') {
@@ -73,16 +72,15 @@ function App() {
     })
     .catch(err => {
       if (err.message === 'Request failed with status code 409') {
-
+        alert('That\'s already the definition')
       }
-    })
+    });
   }
 
   const deleteClick = (deleteWord) => {
     let deleteObject = {
       word: deleteWord
     }
-    console.log(deleteObject)
     axios.delete('http://localhost:3000/glossary', {data: deleteObject})
       .then(response => {
         if (response.status === 200) {

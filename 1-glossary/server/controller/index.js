@@ -30,7 +30,6 @@ module.exports = {
     makeTitle(req.body);
     model.editDefinition(req.body.word, req.body.definition)
       .then((mongoResponse) => {
-        console.log(mongoResponse)
         if (mongoResponse.matchedCount === 1 && mongoResponse.modifiedCount === 1) {
           res.sendStatus(200);
         } else if(mongoResponse.matchedCount === 1 && mongoResponse.modifiedCount === 0) {
@@ -46,10 +45,7 @@ module.exports = {
   },
 
   delete: (req, res) => {
-    console.log('look here')
-    console.log(req.body)
     makeTitle(req.body)
-    console.log(req.body)
     model.deleteWord(req.body.word)
       .then((results) => {
         if (results.deletedCount === 1) {

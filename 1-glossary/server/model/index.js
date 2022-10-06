@@ -12,9 +12,6 @@ module.exports = {
   },
 
   editDefinition: (wordToUpdate, newDef) => {
-    console.log({word: wordToUpdate})
-    console.log('we are here')
-    console.log(newDef)
     return Word.updateOne({word: wordToUpdate}, {definition: newDef});
   },
 
