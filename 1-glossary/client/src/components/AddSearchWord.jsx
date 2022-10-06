@@ -1,17 +1,15 @@
 import React, {useState} from 'react';
 
-const AddSearchWord = function({addClickHandler, searchClickHandler}) {
-  const [inputWord, setInputWord] = useState(null);
-  const [inputDefinition, setInputDefinition] = useState('')
-  if (inputWord === '') {
-    setInputDefinition('');
-    setInputWord(null);
-  }
+const AddSearchWord = function({addClickHandler, inputWord, setInputWord, inputDefinition, setInputDefinition}) {
+
+
   return (
     <div>
       <input id='AddSearch' placeholder="Search or Add" onChange={(event) => {
         setInputWord(event.target.value);
-        searchClickHandler(event.target.value);
+        if (event.target.value === '') {
+          setInputDefinition('');
+        }
       }}/>
       <button onClick={() => {
         if (inputWord && inputWord.length) {

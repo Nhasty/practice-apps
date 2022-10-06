@@ -5,7 +5,13 @@ import axios from 'axios';
 function App() {
   const [words, setWords] = useState([]);
   const [page, setPage] = useState(0);
+  const [inputWord, setInputWord] = useState('');
+  const [inputDefinition, setInputDefinition] = useState('')
 
+  // if (inputWord === '') {
+  //   setInputDefinition('');
+  //   setInputWord(null);
+  // }
   const getPage = (pageNumber) => {
     const pageObject = {page: pageNumber}
     return axios({url: 'http://localhost:3000/glossary', method: 'get', params: pageObject, headers: {'Content-Type': 'application/json'}});
@@ -25,7 +31,7 @@ function App() {
     axios.post('http://localhost:3000/glossary', addObject)
       .then(response => {
         if (response.status === 201) {
-          getPage(page);
+           return getPage(page);
         }
       })
       .then(response => setWords(response.data))
@@ -42,20 +48,6 @@ function App() {
       });
   }
 
-  const searchClick = (searchWord) => {
-    if (searchWord === '') {
-      getPage(page)
-      .then(response => setWords(response.data))
-      .catch(err => console.log(err));
-    } else {
-      let titleSearch = searchWord[0].toUpperCase() + searchWord.slice(1).toLowerCase();
-      let mappedWords = words.filter(wordObject => {
-        return wordObject.word.indexOf(titleSearch) > -1;
-      });
-      setWords(mappedWords)
-    }
-  }
-
   const updateClick = (oldWord, newDef) => {
     let updateWord = {
       word: oldWord,
@@ -64,7 +56,7 @@ function App() {
     axios.put('http://localhost:3000/glossary', updateWord)
     .then((response) => {
       if (response.status === 200) {
-        getPage(page)
+        return getPage(page)
       }
     })
     .then(response => setWords(response.data))
@@ -84,7 +76,7 @@ function App() {
     axios.delete('http://localhost:3000/glossary', {data: deleteObject})
       .then(response => {
         if (response.status === 200) {
-          getPAge(page);
+          return getPage(page);
         }
       })
       .then(response => setWords(response.data))
@@ -117,8 +109,19 @@ function App() {
   return(
     <div>
       <h1>Glossary</h1>
-      <AddSearchWord addClickHandler={addClick} searchClickHandler={searchClick}/>
-      <WordsList words={words} updateClickHandler={updateClick} deleteClickHandler={deleteClick}/>
+      <AddSearchWord
+        addClickHandler={addClick}
+        inputWord={inputWord}
+        setInputWord={setInputWord}
+        inputDefinition={inputDefinition}
+        setInputDefinition={setInputDefinition}
+      />
+      <WordsList
+        words={words}
+        updateClickHandler={updateClick}
+        deleteClickHandler={deleteClick}
+        inputWord={inputWord}
+      />
       <Prev page={page} prevClickHandler={prevClick}/>
       <Next page={page} nextClickHandler={nextClick} />
     </div>

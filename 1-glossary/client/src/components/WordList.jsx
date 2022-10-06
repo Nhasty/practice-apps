@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 
-const WordsList = function({words, updateClickHandler, deleteClickHandler}) {
+const WordsList = function({words, updateClickHandler, deleteClickHandler, inputWord}) {
   let wordsComponents = words.map((wordObject) => {
     return (
       <Word key={wordObject._id.toString()}
@@ -10,7 +10,7 @@ const WordsList = function({words, updateClickHandler, deleteClickHandler}) {
         deleteClickHandler={deleteClickHandler}
       />
     )
-  })
+  }).filter(reactWord => {return reactWord.props.word.indexOf(inputWord) > -1});
   return (
     <ul>
       {wordsComponents}
