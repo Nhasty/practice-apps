@@ -51,8 +51,26 @@ function App() {
     }
   }
 
-  const updateClick = () => {
-
+  const updateClick = (oldWord, newDef) => {
+    let updateWord = {
+      word: oldWord,
+      definition: newDef
+    };
+    axios.put('http://localhost:3000/glossary', updateWord)
+    .then((response) => {
+      if (response.status === 200) {
+        axios.get('http://localhost:3000/glossary')
+        .then((response) => {
+          setWords(response.data)
+        })
+        .catch(err => console.log(err))
+      }
+    })
+    .catch(err => {
+      if (err.message === 'Request failed with status code 409') {
+        alert('Thats not a new definition');
+      }
+    })
   }
 
   const deleteClick = () => {
