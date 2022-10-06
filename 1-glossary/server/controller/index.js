@@ -46,7 +46,10 @@ module.exports = {
   },
 
   delete: (req, res) => {
+    console.log('look here')
+    console.log(req.body)
     makeTitle(req.body)
+    console.log(req.body)
     model.deleteWord(req.body.word)
       .then((results) => {
         if (results.deletedCount === 1) {

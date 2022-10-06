@@ -2,7 +2,7 @@ const Word = require('../db.js');
 
 module.exports = {
   getAll: () => {
-    return Word.find({}).exec();
+    return Word.find({}).sort('word').exec();
   },
 
   create: (wordObject) => {

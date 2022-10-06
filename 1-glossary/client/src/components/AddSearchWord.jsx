@@ -9,7 +9,10 @@ const AddSearchWord = function({addClickHandler, searchClickHandler}) {
   }
   return (
     <div>
-      <input id='AddSearch' placeholder="Search or Add" onChange={(event) => setInputWord(event.target.value)}></input>
+      <input id='AddSearch' placeholder="Search or Add" onChange={(event) => {
+        setInputWord(event.target.value);
+        searchClickHandler(event.target.value);
+      }}/>
       <button onClick={() => {
         if (inputWord && inputWord.length) {
           addClickHandler(inputWord, inputDefinition);
@@ -21,13 +24,6 @@ const AddSearchWord = function({addClickHandler, searchClickHandler}) {
       }}>
         Add
       </button>
-      <button onClick={() => {
-        searchClickHandler(inputWord);
-        document.getElementById('AddSearch').value = '';
-        setInputWord('');
-      }}>
-        Search
-      </button>
       <Definition setInputDefinition={setInputDefinition} inputWord={inputWord}/>
     </div>
   );
@@ -36,7 +32,9 @@ const Definition = function({addClicked, setInputDefinition, inputWord}) {
   if (inputWord) {
     if (inputWord !== '') {
       return (
-        <input id="Definition" placeholder='Add a defintion' onChange={(event) => setInputDefinition(event.target.value)}></input>
+        <div>
+         <input id="Definition" placeholder='Add a defintion' onChange={(event) => setInputDefinition(event.target.value)}></input>
+        </div>
       );
     } else {
       return <div></div>;

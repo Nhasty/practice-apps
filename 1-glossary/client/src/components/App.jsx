@@ -4,6 +4,7 @@ import WordsList from './WordList.jsx';
 import axios from 'axios';
 function App() {
   const [words, setWords] = useState([]);
+
   useEffect(() => {
     axios.get('http://localhost:3000/glossary')
       .then((response) => {
@@ -23,18 +24,21 @@ function App() {
           axios.get('http://localhost:3000/glossary')
             .then((response) => {
               setWords(response.data)
+              alert(`${addWord} is already in the Glossary!`)
             })
             .catch(err => console.log(err))
         }
       })
       .catch(err => {
         if (err.message === 'Request failed with status code 409') {
-          alert(`${addWord} is already in Glossary`)
-        } else {
-          console.log(err.message)
+          axios.get('http://localhost:3000/glossary').then((response) => {setWords(response.data)}).catch(err => console.log(err));
         }
       });
   }
+  // alert(`${addWord} is already in Glossary`)
+  //       } else {
+  //         console.log(err.message)
+  //       }
 
   const searchClick = (searchWord) => {
     if (searchWord === '') {
@@ -44,8 +48,9 @@ function App() {
         })
         .catch(err => console.log(err))
     } else {
+      let titleSearch = searchWord[0].toUpperCase() + searchWord.slice(1).toLowerCase();
       let mappedWords = words.filter(wordObject => {
-        return wordObject.word.indexOf(searchWord) > -1;
+        return wordObject.word.indexOf(titleSearch) > -1;
       });
       setWords(mappedWords)
     }
@@ -68,13 +73,27 @@ function App() {
     })
     .catch(err => {
       if (err.message === 'Request failed with status code 409') {
-        alert('Thats not a new definition');
+
       }
     })
   }
 
-  const deleteClick = () => {
-
+  const deleteClick = (deleteWord) => {
+    let deleteObject = {
+      word: deleteWord
+    }
+    console.log(deleteObject)
+    axios.delete('http://localhost:3000/glossary', {data: deleteObject})
+      .then(response => {
+        if (response.status === 200) {
+          axios.get('http://localhost:3000/glossary')
+            .then((response) => {
+              setWords(response.data)
+            })
+            .catch(err => console.log(err));
+        }
+      })
+      .catch(err => console.log(err));
   }
 
 
@@ -86,5 +105,5 @@ function App() {
     </div>
   )
 }
-
+// can i get these changes updated
 export default App;

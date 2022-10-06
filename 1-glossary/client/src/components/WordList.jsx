@@ -39,7 +39,7 @@ const Word = function({word, def, updateClickHandler, deleteClickHandler}) {
       }}>
         update
       </button>
-      <button onClick={() => {deleteClickHandler()}}>delete</button>
+      <button onClick={() => {deleteClickHandler(word)}}>delete</button>
       <DefinitionUpdate updateClicked={updateClicked} setUpdateDefinition={setUpdateDefinition}/>
     </li>
   )
