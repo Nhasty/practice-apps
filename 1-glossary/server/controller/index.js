@@ -10,7 +10,20 @@ const makeTitle = (wordObject) => {
 
 module.exports = {
   get: (req, res) => {
-    model.getAll().then(data => res.status(200).json(data));
+    const requestPage = req.query.page;
+    model.getAll()
+      .then(data => {
+        const totalPages = Math.ceil(data.length / 10);
+        if (requestPage < totalPages) {
+          const requestPageIndexed = requestPage * 10;
+          const dataToSend = data.slice(requestPageIndexed, requestPageIndexed + 10);
+          res.status(200).json(dataToSend);
+        } else if (requestPage >= totalPages) {
+          res.sendStatus(404);
+        }
+
+      })
+      .catch(err => res.sendStatus(500))
   },
 
   post: (req, res) => {
@@ -18,7 +31,7 @@ module.exports = {
     model.create(req.body)
       .then(() => res.sendStatus(201))
       .catch(err => {
-        if (err.code === 11000 /* check arror code for duplicates*/) {
+        if (err.code === 11000 /* check error code for duplicates*/) {
           res.sendStatus(409);
         } else {
           res.sendStatus(500);
